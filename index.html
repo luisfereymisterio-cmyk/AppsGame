@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRP AI: The Supply Chain Frontier</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #game-container {
+            background-color: #161b22;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            width: 80%;
+            max-width: 600px;
+        }
+        h1 { color: #58a6ff; }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 10px;
+            background: #0d1117;
+            border-radius: 5px;
+        }
+        .log {
+            height: 200px;
+            overflow-y: auto;
+            background: #0d1117;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #30363d;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+        .actions button {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .actions button:hover {
+            background-color: #2ea043;
+        }
+        .actions button:disabled {
+            background-color: #21262d;
+            color: #484f58;
+            cursor: not-allowed;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>DRP AI: The Supply Chain Frontier</h1>
+        <div class="stats">
+            <span>Turno: <span id="turn">1</span></span>
+            <span>Inventario: <span id="inventory">100</span></span>
+            <span>Satisfacción: <span id="satisfaction">80</span>%</span>
+        </div>
+        <div id="data-status" style="margin-bottom: 10px; color: #f85149;">Estado de Datos: DESORGANIZADO</div>
+        <div class="log" id="log">
+            Bienvenido, Ingeniero. Los datos de la cadena de suministro están desordenados. Usa la IA para comenzar.
+        </div>
+        <div class="actions" id="setup-actions">
+            <button onclick="processData()">1. Usar IA para organizar datos y columnas</button>
+        </div>
+        <div class="actions hidden" id="main-actions">
+            <button onclick="analyzeDemand()">1. Análisis de Demanda en Tiempo Real</button>
+            <button onclick="reinforceSuppliers()">2. Reforzar Convenios (Lead Time)</button>
+            <button onclick="shipToCustomers()">3. Enviar a Clientes (Valor Agregado)</button>
+        </div>
+    </div>
+
+    <script>
+        let state = {
+            turn: 1,
+            inventory: 100,
+            satisfaction: 80,
+            aiOptimized: false,
+            demandForecast: 0,
+            leadTime: 5
+        };
+
+        function log(message, color = "#c9d1d9") {
+            const logElement = document.getElementById('log');
+            logElement.innerHTML += `<div style="color: ${color}">${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateUI() {
+            document.getElementById('turn').innerText = state.turn;
+            document.getElementById('inventory').innerText = state.inventory;
+            document.getElementById('satisfaction').innerText = state.satisfaction;
+
+            if (state.aiOptimized) {
+                document.getElementById('data-status').innerText = "Estado de Datos: ESTRUCTURADO POR IA";
+                document.getElementById('data-status').style.color = "#3fb950";
+                document.getElementById('setup-actions').classList.add('hidden');
+                document.getElementById('main-actions').classList.remove('hidden');
+            }
+        }
+
+        function processData() {
+            log("[IA] Organizando datos y estructurando columnas...");
+            setTimeout(() => {
+                state.aiOptimized = true;
+                log("[IA] Datos procesados. Ahora puedes enfocarte en brindar valor agregado.", "#58a6ff");
+                updateUI();
+            }, 1000);
+        }
+
+        function analyzeDemand() {
+            log("[IA] Escaneando tendencias de mercado y búsquedas...");
+            setTimeout(() => {
+                state.demandForecast = Math.floor(Math.random() * 40) + 10;
+                if (Math.random() > 0.6) {
+                    let hidden = Math.floor(Math.random() * 30) + 20;
+                    log(`!!! [INSIGHT] ¡IA descubrió ventas ocultas! Surge de +${hidden} unidades.`, "#f1e05a");
+                    state.demandForecast += hidden;
+                } else {
+                    log(`[IA] Predicción de demanda estabilizada en ${state.demandForecast} unidades.`, "#3fb950");
+                }
+                updateUI();
+            }, 800);
+        }
+
+        function reinforceSuppliers() {
+            log("[IA] Revisando desempeño de proveedores...");
+            setTimeout(() => {
+                if (state.leadTime > 2) {
+                    state.leadTime--;
+                    log(`[IA] Convenios reforzados. Lead time reducido a ${state.leadTime} días.`, "#58a6ff");
+                } else {
+                    log("[IA] Lead time ya está optimizado al máximo.");
+                }
+                log("[IA] Coordinación activa para mantener lead time.");
+                updateUI();
+            }, 800);
+        }
+
+        function shipToCustomers() {
+            if (state.demandForecast === 0) {
+                log("[ERROR] Debes analizar la demanda antes de enviar.", "#f85149");
+                return;
+            }
+
+            log(`[INGENIERO] Cumpliendo pedidos (Objetivo: ${state.demandForecast})...`);
+
+            let shipped = Math.min(state.inventory, state.demandForecast);
+            state.inventory -= shipped;
+
+            if (shipped >= state.demandForecast) {
+                log(`[VALOR] ¡Clientes satisfechos! Enviadas ${shipped} unidades.`, "#3fb950");
+                state.satisfaction = Math.min(100, state.satisfaction + 5);
+            } else {
+                let backlog = state.demandForecast - shipped;
+                log(`[VALOR] ¡Falta de stock! No se pudieron cumplir ${backlog} unidades.`, "#f85149");
+                state.satisfaction = Math.max(0, state.satisfaction - 10);
+            }
+
+            log(`[INFO] Nuevo cargamento llega en ${state.leadTime} turnos.`);
+            state.inventory += 30;
+            state.demandForecast = 0;
+            state.turn++;
+            updateUI();
+        }
+    </script>
+</body>
+</html>
